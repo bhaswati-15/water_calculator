@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Water Footprint Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px; /* Add padding around the body */
+            background-color: #e6e6fa; /* Light Purple (Lavender) */
+            color: #333;
+            display: flex; /* Use flexbox for centering */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%; /* Responsive width */
+            margin: 20px; /* Add margin for smaller screens */
+            padding: 30px 40px; /* More horizontal padding */
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #5a4fcf; /* Darker, richer purple */
+            margin-bottom: 30px;
+            font-size: 1.9em;
+            font-weight: 600;
+        }
+        h2 {
+            color: #6a0dad; /* Standard Purple */
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: 600; /* Bolder labels */
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="number"]:focus {
+            border-color: #5a4fcf; /* Highlight focus */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(90, 79, 207, 0.15); /* Soft focus ring */
+        }
+        /* Remove number input arrows */
+        input[type=number] { -moz-appearance: textfield; }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 30px;
+            background-color: #6a0dad; /* Standard purple */
+            color: white;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        button:hover {
+            background-color: #5a0a9d; /* Darker purple on hover */
+        }
+        button:active {
+            transform: scale(0.98); /* Slightly more pronounced press effect */
+        }
+        #result {
+            margin-top: 35px;
+            padding: 18px 20px;
+            background-color: #f8f8ff; /* Ghost White - very light background */
+            border: 1px solid #dcdcdc; /* Light grey border */
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem; /* Slightly larger result text */
+            font-weight: 500; /* Medium weight */
+            color: #333;
+            min-height: 40px; /* Ensure space even when empty */
+            line-height: 1.4;
+        }
+        .result-value {
+             color: #5a4fcf; /* Purple for the number */
+             font-weight: bold; /* Make the number stand out */
+             font-size: 1.25em; /* Make number slightly larger */
+        }
+        .error-message {
+             color: #d9534f; /* Bootstrap danger color for text */
+             font-weight: 500;
+             font-size: 1.1rem;
+             border: 1px solid #d9534f; /* Red border for the result box */
+             background-color: #fdf7f7; /* Very light red background */
+        }
+        .input-error {
+            border-color: #d9534f !important; /* Red border for invalid input */
+            background-color: #fffafa; /* Very light red background hint */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Water Footprint Calculator </h1>
+
+        <form id="waterFootprintForm">
+
+            <h2>🚿 Direct Water Use</h2>
+            <label for="showerTime">Average daily shower time (minutes):</label>
+            <input type="number" id="showerTime" name="showerTime" min="0" step="any" required placeholder="e.g., 5">
+
+            <label for="toiletFlushes">Number of toilet flushes per day:</label>
+            <input type="number" id="toiletFlushes" name="toiletFlushes" min="0" step="1" required placeholder="e.g., 4">
+
+            <label for="laundryLoads">Weekly laundry loads:</label>
+            <input type="number" id="laundryLoads" name="laundryLoads" min="0" step="any" required placeholder="e.g., 1">
+
+            <label for="dishwasherCycles">Weekly dishwasher cycles:</label>
+            <input type="number" id="dishwasherCycles" name="dishwasherCycles" min="0" step="any" required placeholder="e.g., 0">
+
+            <label for="tapTime">Minutes of tap running daily:</label>
+            <input type="number" id="tapTime" name="tapTime" min="0" step="any" required placeholder="e.g., 3">
+
+            <h2>🍔 Food Consumption (Virtual Water)</h2>
+            <label for="meatMeals">Meat-based meals per day:</label>
+            <input type="number" id="meatMeals" name="meatMeals" min="0" step="any" required placeholder="e.g., 1">
+
+            <label for="vegMeals">Vegetarian meals per day:</label>
+            <input type="number" id="vegMeals" name="vegMeals" min="0" step="any" required placeholder="e.g., 2">
+
+            <label for="coffeeCups">Cups of coffee/tea daily:</label>
+            <input type="number" id="coffeeCups" name="coffeeCups" min="0" step="any" required placeholder="e.g., 2">
+
+            <h2>💡 Indirect Use (Virtual Water)</h2>
+            <label for="electricity">Daily electricity consumption (kWh):</label>
+            <input type="number" id="electricity" name="electricity" min="0" step="any" required placeholder="e.g., 5">
+
+            <label for="carDistance">Daily car distance driven (km):</label>
+            <input type="number" id="carDistance" name="carDistance" min="0" step="any" required placeholder="e.g., 10">
+
+            <button type="button" onclick="calculateFootprint()">Calculate My Footprint</button>
+
+        </form>
+
+        <div id="result">Enter your usage details above and click calculate.</div>
+
+    </div>
+
+    <script>
+        // --- Water consumption factors (liters) ---
+        const SHOWER_PER_MIN = 10;
+        const TOILET_FLUSH = 6;
+        const LAUNDRY_LOAD = 50;
+        const DISHWASHER_CYCLE = 15;
+        const TAP_PER_MIN = 6;
+        const MEAT_MEAL = 3000;
+        const VEG_MEAL = 1000;
+        const COFFEE_CUP = 140;
+        const ELECTRICITY_PER_KWH = 2.5;
+        const CAR_PER_KM = 3;
+
+        // Helper to get validated number input
+        function getNumericValue(id) {
+            const element = document.getElementById(id);
+            element.classList.remove('input-error'); // Clear previous error state
+            const value = parseFloat(element.value);
+
+            // Check if empty or invalid number or negative
+            if (element.value.trim() === '' || isNaN(value) || value < 0) {
+                element.classList.add('input-error'); // Mark specific input as invalid
+                return NaN;
+            }
+            return value;
+        }
+
+        // Main calculation function
+        function calculateFootprint() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Clear previous result/error content
+            resultDiv.classList.remove('error-message'); // Clear error styling
+
+            let hasError = false;
+            const inputIDs = [
+                'showerTime', 'toiletFlushes', 'laundryLoads', 'dishwasherCycles',
+                'tapTime', 'meatMeals', 'vegMeals', 'coffeeCups',
+                'electricity', 'carDistance'
+            ];
+            const values = {};
+
+            // --- Get and validate all input values ---
+            inputIDs.forEach(id => {
+                const value = getNumericValue(id);
+                if (isNaN(value)) {
+                    hasError = true;
+                }
+                values[id] = value; // Store value even if NaN to avoid re-querying
+            });
+
+
+            // If any input was invalid, show an error message and stop
+            if (hasError) {
+                 resultDiv.textContent = 'Please check highlighted fields. All values must be valid, non-negative numbers.';
+                 resultDiv.classList.add('error-message');
+                 return;
+            }
+
+            // --- Calculate components (using stored valid values) ---
+            const shower = values.showerTime * SHOWER_PER_MIN;
+            const toilet = values.toiletFlushes * TOILET_FLUSH;
+            const laundry = (values.laundryLoads / 7) * LAUNDRY_LOAD; // Convert weekly to daily
+            const dishes = (values.dishwasherCycles / 7) * DISHWASHER_CYCLE; // Convert weekly to daily
+            const tap = values.tapTime * TAP_PER_MIN;
+            const meat = values.meatMeals * MEAT_MEAL;
+            const veg = values.vegMeals * VEG_MEAL;
+            const coffee = values.coffeeCups * COFFEE_CUP;
+            const electricity = values.electricity * ELECTRICITY_PER_KWH;
+            const car = values.carDistance * CAR_PER_KM;
+
+            // --- Calculate total ---
+            const totalFootprint = shower + toilet + laundry + dishes + tap +
+                                   meat + veg + coffee + electricity + car;
+
+            // --- Display result ---
+            const formattedTotal = totalFootprint.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }); // Format as whole number with commas
+            resultDiv.innerHTML = Your estimated daily water footprint is: <br><span class="result-value">${formattedTotal} Liters</span>;
+        }
+
+        // Add listeners to clear errors on input change
+        const inputs = document.querySelectorAll('#waterFootprintForm input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                 // If value becomes potentially valid, remove error class
+                 // Validation happens fully on button click
+                 const numericValue = parseFloat(input.value);
+                 if (input.value.trim() !== '' && !isNaN(numericValue) && numericValue >= 0) {
+                     input.classList.remove('input-error');
+                 }
+                 // Optionally clear the main result message on any input change
+                  // if (!document.getElementById('result').classList.contains('error-message')) {
+                  //    document.getElementById('result').innerHTML = 'Recalculate for updated results.';
+                  // }
+            });
+        });
+
+    </script>
+
+</body>
+</html>
